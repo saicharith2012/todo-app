@@ -26,3 +26,9 @@ jobs:
                 file: ./docker/Dockerfile.backend
                 push: true
                 tags: saicharith2012/todo-app-backend:${{github.sha}}
+
+            - name: Deploy to VM
+              run: |
+                echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+                chmod 600 ~/ssh_key
+                ssh -i ~/ssh_key -o StrictHostKeyChecking=no ${{secrets.SERVER_HOST}} -t "docker pull saicharith2012/todo-app-backend:${{github.sha}} && docker stop todo-app-backend && docker run --name todo-app-backend -d -p 3001:3001 -e DATABASE_URL=${{secrets.DATABASE_URL}} saicharith2012/todo-app-backend:${{github.sha}}"
