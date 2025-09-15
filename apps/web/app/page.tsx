@@ -3,7 +3,7 @@ import { prismaClient } from "@repo/db/client";
 export default async function Home() {
   const users = await prismaClient.user.findMany();
 
-  return <div className="flex flex-wrap">users: {JSON.stringify(users)}</div>;
+  return <div className="flex flex-wrap">list of users: {JSON.stringify(users)}</div>;
 }
 
 export const revalidate = 10; // Incremental Site Generation

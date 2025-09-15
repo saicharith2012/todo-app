@@ -17,7 +17,7 @@ app.get("/users", async (req, res) => {
 
     res.json({
       message: "users fetched successfully",
-      user_list: users,
+      users,
     });
   } catch (error) {
     res.json({

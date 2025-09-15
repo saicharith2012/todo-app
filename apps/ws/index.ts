@@ -8,7 +8,7 @@ Bun.serve({
       return;
     }
 
-    return new Response("Upgrade failed", { status: 500 });
+    return new Response("Upgrade failed...", { status: 500 });
   },
   websocket: {
     async message(ws, message) {
