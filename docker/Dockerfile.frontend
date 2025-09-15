@@ -1,11 +1,11 @@
-FROM node:alpine3.21
+# syntax=docker/dockerfile:1.3:
+FROM node:alpine3.21 as build
 
 RUN npm install -g bun
 
 RUN apk add --no-cache openssl libc6-compat
 WORKDIR /usr/src/app
 
-ARG DATABASE_URL
 COPY ./packages ./packages
 COPY ./bun.lock ./bun.lock
 
@@ -16,8 +16,11 @@ COPY ./apps/web ./apps/web
 
 RUN bun install
 RUN bun run db:generate
-RUN DATABASE_URL=${DATABASE_URL} bun run build
+RUN --mount=type=secret,id=database_url bun run build
 
+FROM node:alpine3.21
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/ .
 EXPOSE 3000
 
 # since bun can execute ts code, no need to build
