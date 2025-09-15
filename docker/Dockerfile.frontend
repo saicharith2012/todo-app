@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1.3
-FROM node:alpine3.21 as build
+FROM node:alpine3.21 AS build
 
 RUN npm install -g bun
 
@@ -16,7 +16,8 @@ COPY ./apps/web ./apps/web
 
 RUN bun install
 RUN bun run db:generate
-RUN --mount=type=secret,id=database_url bun run build
+RUN --mount=type=secret,id=database_url \
+    DATABASE_URL="$(cat /run/secrets/database_url)" \ bun run build
 
 FROM node:alpine3.21
 WORKDIR /usr/src/app
