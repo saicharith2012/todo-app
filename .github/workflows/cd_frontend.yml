@@ -37,4 +37,4 @@ jobs:
               run: |
                 echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
                 chmod 600 ~/ssh_key
-                ssh -i ~/ssh_key -o StrictHostKeyChecking=no ${{secrets.SERVER_HOST}} -t "docker stop todo-app-frontend && docker rm todo-app-frontend && docker run --name todo-app-frontend -d -p 3001:3001 -e DATABASE_URL='${{secrets.DATABASE_URL}}' saicharith2012/todo-app-frontend:${{github.sha}} && docker image prune -af"        
+                ssh -i ~/ssh_key -o StrictHostKeyChecking=no ${{secrets.SERVER_HOST}} -t "docker stop todo-app-frontend && docker rm todo-app-frontend && docker run --name todo-app-frontend -d -p 3000:3000 -e DATABASE_URL='${{secrets.DATABASE_URL}}' saicharith2012/todo-app-frontend:${{github.sha}} && docker image prune -af"        
