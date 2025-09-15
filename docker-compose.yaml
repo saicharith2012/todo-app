@@ -1,0 +1,43 @@
+services:
+  postgres:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=mysecretpassword
+  todo-app-frontend:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.frontend
+      args:
+        - DATABASE_URL=postgresql://postgres:mysecretpassword@localhost:5432/postgres
+    network_mode: host
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=postgresql://postgres:mysecretpassword@postgres:5432/postgres
+    depends_on:
+      postgres:
+        condition: service_started
+  todo-app-http:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.backend
+    ports:
+      - 3001:3001
+    environment:
+      - DATABASE_URL=postgresql://postgres:mysecretpassword@postgres:5432/postgres
+    depends_on:
+      postgres:
+        condition: service_started
+  todo-app-ws:
+    build:
+      context: ./
+      dockerfile: ./docker/Dockerfile.websocket
+    ports:
+      - 8081:8081
+    environment:
+      - DATABASE_URL=postgresql://postgres:mysecretpassword@postgres:5432/postgres
+    depends_on:
+      postgres:
+        condition: service_started

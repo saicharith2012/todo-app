@@ -1,0 +1,29 @@
+{
+  "name": "todo-app",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types",
+    "db:generate": "cd packages/db && bunx prisma generate",
+    "db:migrate": "cd packages/db && bunx prisma migrate dev",
+    "start:web": "cd apps/web && bun run start",
+    "start:http": "cd apps/http && bun run index.ts",
+    "start:ws": "cd apps/ws && bun run index.ts"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2",
+    "turbo": "^2.5.6",
+    "typescript": "5.9.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.2.21",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
