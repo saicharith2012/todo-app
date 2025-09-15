@@ -26,3 +26,9 @@ jobs:
                 file: ./docker/Dockerfile.websocket
                 push: true
                 tags: saicharith2012/todo-app-websocket:${{github.sha}}
+
+            - name: Deploy to VM
+              run: |
+                echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/ssh_key
+                chmod 600 ~/ssh_key
+                ssh -i ~/ssh_key -o StrictHostKeyChecking=no ${{secrets.SERVER_HOST}} -t "docker stop todo-app-websocket && docker rm todo-app-websocket && docker run --name todo-app-websocket -d -p 8081:8081 -e DATABASE_URL='${{secrets.DATABASE_URL}}' saicharith2012/todo-app-websocket:${{github.sha}} && docker image prune -af"        
